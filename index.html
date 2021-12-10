@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+        .area-wrapper {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #area {
+            width: 300px;
+            height: 300px;
+            background-color: rgb(61, 194, 204);
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .box {
+            width: 100px;
+            height: 100px;
+            border: 1px solid blue;
+            box-sizing: border-box;
+            font-size: 90px;
+            color: rgb(204, 7, 7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .win-x,
+        .O-win,
+        .N-win {
+            display: none;
+            background-color: red;
+            width: 300px;
+            height: 100px;
+            color: wheat;
+            font-size: 30px;
+            border-radius: 7px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="area-wrapper">
+        <div id="area">
+            <div class="box" id="0"></div>
+            <div class="box" id="1"></div>
+            <div class="box" id="2"></div>
+            <div class="box" id="3"></div>
+            <div class="box" id="4"></div>
+            <div class="box" id="5"></div>
+            <div class="box" id="6"></div>
+            <div class="box" id="7"></div>
+            <div class="box" id="8"></div>
+        </div>
+        <div class="win-x">X win</div>
+        <div class="O-win">O win</div>
+        <div class="N-win">Nobody win</div>
+    </div>
+    <script>
+        const winner = [
+            [0, 4, 8],
+            [0, 1, 2],
+            [0, 3, 6],
+            [2, 5, 8],
+            [1, 4, 7],
+            [3, 4, 5],
+            [6, 7, 8],
+        ];
+        let O = []
+        let X = []
+        let r = []
+        let g = []
+
+
+        function win() {
+            for (let i = 0; i < document.getElementsByClassName("box").length; i++) {
+                if (document.getElementsByClassName("box")[i].innerHTML == "O") {
+                    O.push(i)
+                } else if (document.getElementsByClassName("box")[i].innerHTML == "X") {
+                    X.push(i)
+                }
+
+            }
+        }
+
+        function uniq() {
+            r = []
+            g = []
+            for (let i = 0; i < O.length; i++) {
+                if (O.includes(i) == true) {
+                    r.push(i)
+                }
+            }
+            for (let i = 0; i < X.length; i++) {
+                if (X.includes(i) == true) {
+                    g.push(i)
+                }
+
+            }
+        }
+
+        function checkNull() {
+            let all = 0;
+            for (let i = 0; i < document.getElementsByClassName("box").length; i++) {
+                if (document.getElementsByClassName("box")[i].innerHTML !== '') {
+                    all++
+                }
+            }
+            return all;
+        }
+
+        function won() {
+            for (let i = 0; i < winner.length; i++) {
+                if (true == r.includes((winner[i])[0])&& true == r.includes((winner[i])[1]) && true == r.includes(winner[i][2]) && r.length>2) {
+                    if (true == r.includes(winner[i][2])) {
+                        document.getElementsByClassName("O-win")[0].style.display = "block"
+                        setTimeout(() => {
+                            location.reload();
+                        }, 2000)
+                    } 
+                } else if (true == g.includes((winner[i])[0] && true == g.includes((winner[i])[1])) && true == g.includes(winner[i][2])) {
+                    if (true == g.includes(winner[i][2])) {
+                        document.getElementsByClassName("win-x")[0].style.display = "block"
+                        setTimeout(() => {
+                            location.reload();
+                        }, 2000)
+                    } 
+                } else if (checkNull() == document.getElementsByClassName("box").length) {
+                    document.getElementsByClassName("N-win")[0].style.display = "block"
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000)
+                }
+                console.log(r, g)
+                console.log(winner[0][0], winner[0][1], winner[0][2])
+            }
+        }
+        const area = document.getElementById('area');
+        let move = 0;
+        area.addEventListener('click', e => {
+            if (e.target.innerHTML == "") {
+                if (e.target.className = 'box') {
+                    e.target.style.cursor = 'not-allowed';
+                    if (move % 2 === 0) {
+                        e.target.innerHTML = 'X'
+                    } else {
+                        e.target.innerHTML = 'O';
+                    }
+                    move++;
+                }
+            }
+            win()
+            uniq()
+            won()
+        });
+    </script>
+</body>
+
+</html>
